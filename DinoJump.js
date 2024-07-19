@@ -146,33 +146,17 @@ let jumping = false;
 onInput("w", () => {
   if (!jumping){
     jumping = true;
-    getFirst(player).y -= jumpPower;
-    setTimeout(() => {
-      getFirst(player).y += jumpPower;
-      jumping = false;
-    }, 500)
-})
-onInput("a", () => {
-  if (!jumping){
-    jumping = true;
-    getFirst(player).y -= jumpPower;
-    setTimeout(() => {
-      getFirst(player).y += jumpPower;
-      jumping = false;
-    }, 500)
-  }  
+    for(i=0;i<11;i++){
+      getFirst(player).y -= (jumpPower / 10);
+    }
+    for(i=0;i<11;i++){
+      getFirst(player).y += (jumpPower / 10);
+    }
+    jumping = false;
+    }
+    
 })
 
-onInput("d", () => {
-  if (!jumping){
-    jumping = true;
-    getFirst(player).y -= jumpPower;
-    setTimeout(() => {
-      getFirst(player).y += jumpPower;
-      jumping = false;
-    }, 500)
-  }  
-})
 
 afterInput(() => {
 
