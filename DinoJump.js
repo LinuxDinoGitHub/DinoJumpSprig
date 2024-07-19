@@ -14,8 +14,8 @@ const small = 'd'
 const floor = 'f'
 const floor2 = 'l'
 const cactus1 = 'c'
-const cactus2 = 'a'
-const cactus3 = 't'
+const cactus2 = 'e'
+const cactus3 = 'g'
 
 setLegend(
   [player, bitmap`
@@ -126,17 +126,17 @@ setLegend(
 ................
 ................
 ................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................`],
+.........0......
+....0....0000...
+0..00...0044000.
+000000.0044D4000
+0044D4004DD44D0.
+04D4D4004DD44D0.
+04DDD4004DD44D0.
+04DD44004DD44D0.
+0D4D44004DD44D0.
+99DD4400D4D49999
+994D4400D4D49999`],
 )
 
 
@@ -145,13 +145,13 @@ setSolids([])
 let level = 0
 const levels = [
   map`
-........
-........
-........
-........
-........
-p.....c.
-flflflfl`]
+..........
+..........
+..........
+..........
+..........
+p........c
+flflflflfl`]
 
 setMap(levels[level])
 
@@ -169,14 +169,49 @@ onInput("w", () => {
     setTimeout(()=>{
     getFirst(player).y += jumpPower;
     jumping = false;
-    },200)
+    },300)
   }  
 })
 
 afterInput(() => {
 
 })
+function placeCactus(){
+  let randomNum = Math.floor(Math.random() * 3);
+  if (randomNum == 0){
+    addSprite(5,6,cactus1);
+  }
+  else if(randomNum == 1){
+    addSprite(5,6,cactus2);
+  }
+  else{
+    addSprite(5,6,cactus3);
+  }
+}
 
+function checkCollision(){
+  let cactuspos = tilesWith(cactus1, cactus2, cactus3);
+  let playerpos = tilesWith(player);
+  for(const x of cactuspos){
+    if(x == playerpos){
+      gameOver = true;
+    }
+  }
+}
 function frame(){
-  
+  let cacti = getAll(cactus1, cactus2, cactus3);
+  for(const c of cacti){
+    c.x -= 1;
+  }
+  let randomNum = Math.floor(Math.random() * 3);
+  if (randomNum == 0){
+    placeCactus()
+  }
+  checkCollision()
+}
+let gameOver = false;
+while(!gameOver){
+  setInterval(()=>{
+    frame();
+  },200);
 }
