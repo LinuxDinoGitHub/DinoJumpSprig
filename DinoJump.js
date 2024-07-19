@@ -10,6 +10,7 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 
 const player = "p"
+const player2 = '2'
 const small = 'd'
 const floor = 'f'
 const floor2 = 'l'
@@ -19,7 +20,6 @@ const cactus3 = 'g'
 
 setLegend(
   [player, bitmap`
-................
 .........0000...
 .......00DDD00..
 .......0DDD0D0..
@@ -33,8 +33,26 @@ setLegend(
 ..04DDDDDDD000..
 .00000000000....
 ....0....0......
+....00...0......
+.........0......
+.........00.....`],
+  [player2, bitmap`
+.........0000...
+.......00DDD00..
+.......0DDD0D0..
+......0DDDDDDD0.
+......0DDDDD220.
+......0DDD0000..
+......0DDDD90...
+.....00DDDDC0...
+....04DDDDD9000.
+...04DDDDDDC0...
+..04DDDDDDD000..
+.00000000000....
 ....0....0......
-....00...00.....`],
+....0....00.....
+....0...........
+....00..........`],
   [small, bitmap`
 ................
 ................
@@ -145,20 +163,55 @@ setSolids([])
 let level = 0
 const levels = [
   map`
-..........
-..........
-..........
-..........
-..........
-p........c
-flflflflfl`]
+...........
+...........
+...........
+...........
+...........
+..p.......c
+fflflflflfl`]
 
 setMap(levels[level])
 
 setPushables({
   [player]: []
 })
-
+const animationFrames = [ bitmap`
+.........0000...
+.......00DDD00..
+.......0DDD0D0..
+......0DDDDDDD0.
+......0DDDDD220.
+......0DDD0000..
+......0DDDD90...
+.....00DDDDC0...
+....04DDDDD9000.
+...04DDDDDDC0...
+..04DDDDDDD000..
+.00000000000....
+....0....0......
+....00...0......
+.........0......
+.........00.....`,
+ bitmap`
+.........0000...
+.......00DDD00..
+.......0DDD0D0..
+......0DDDDDDD0.
+......0DDDDD220.
+......0DDD0000..
+......0DDDD90...
+.....00DDDDC0...
+....04DDDDD9000.
+...04DDDDDDC0...
+..04DDDDDDD000..
+.00000000000....
+....0....0......
+....0....00.....
+....0...........
+....00..........`]
+const animatedSprite = addSprite(2,5, player);
+animatedSprite.bitmapKey = animationFrames[0]
 let jumpPower = 1;
 let jumping = false;
 
@@ -179,13 +232,13 @@ afterInput(() => {
 function placeCactus(){
   let randomNum = Math.floor(Math.random() * 3);
   if (randomNum == 0){
-    addSprite(5,6,cactus1);
+    addSprite(10,5,cactus1);
   }
   else if(randomNum == 1){
-    addSprite(5,6,cactus2);
+    addSprite(10,5,cactus2);
   }
   else{
-    addSprite(5,6,cactus3);
+    addSprite(10,5,cactus3);
   }
 }
 
@@ -198,7 +251,10 @@ function checkCollision(){
     }
   }
 }
+let currFrame = 0;
 function frame(){
+  animatedSprite.bitmapKey = animatedFrames[currFrame % 2]
+  currFrame += 1;
   let cacti = getAll(cactus1, cactus2, cactus3);
   for(const c of cacti){
     c.x -= 1;
@@ -208,10 +264,22 @@ function frame(){
     placeCactus()
   }
   checkCollision()
+  clearTile(0,5);
 }
 let gameOver = false;
-while(!gameOver){
-  setInterval(()=>{
+
+
+setInterval(()=>{
+  if(!gameOver){
     frame();
-  },200);
-}
+    console.log(getFirst(cactus1))
+  }
+  else{
+    addText("Game Over", {
+      x: 10,
+      y: 4,
+      color: color`3`
+    })
+  }
+},100);
+
