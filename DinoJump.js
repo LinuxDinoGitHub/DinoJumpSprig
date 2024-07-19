@@ -12,6 +12,7 @@ https://sprig.hackclub.com/gallery/getting_started
 const player = "p"
 const small = 'd'
 const floor = 'f'
+const floor2 = 'l'
 const cactus1 = 'c'
 const cactus2 = 'a'
 const cactus3 = 't'
@@ -68,6 +69,23 @@ setLegend(
 9999999C99999999
 9999999999999999
 9999999999999999`],
+  [floor2, bitmap`
+0000000000000000
+9999999999999999
+9999999999999999
+9999999999999999
+999C999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+99999999C9999C99
+9999999999999999
+9999999999999999
+999C999999999999
+9999999999999999
+9999999999999C99
+9999999999999999
+9999999999999999`],
   [cactus1, bitmap`
 ................
 ................
@@ -121,18 +139,19 @@ setLegend(
 ................`],
 )
 
+
 setSolids([])
 
 let level = 0
 const levels = [
   map`
-.......
-.......
-.......
-.......
-.......
-p.....c
-fffffff`]
+........
+........
+........
+........
+........
+p.....c.
+flflflfl`]
 
 setMap(levels[level])
 
@@ -146,18 +165,18 @@ let jumping = false;
 onInput("w", () => {
   if (!jumping){
     jumping = true;
-    for(i=0;i<11;i++){
-      getFirst(player).y -= (jumpPower / 10);
-    }
-    for(i=0;i<11;i++){
-      getFirst(player).y += (jumpPower / 10);
-    }
+    getFirst(player).y -= jumpPower;
+    setTimeout(()=>{
+    getFirst(player).y += jumpPower;
     jumping = false;
-    }
-    
+    },200)
+  }  
 })
-
 
 afterInput(() => {
 
 })
+
+function frame(){
+  
+}
