@@ -33,9 +33,9 @@ setLegend(
 ..04DDDDDDD000..
 .00000000000....
 ....0....0......
-....00...0......
-.........0......
-.........00.....`],
+....0....0......
+....0....0......
+....00...00.....`],
   [player2, bitmap`
 .........0000...
 .......00DDD00..
@@ -210,8 +210,8 @@ const animationFrames = [ bitmap`
 ....0....00.....
 ....0...........
 ....00..........`]
-const animatedSprite = addSprite(2,5, player);
-animatedSprite.bitmapKey = animationFrames[0]
+//const animatedSprite = addSprite(2,5, player);
+//animatedSprite.bitmapKey = animationFrames[0]
 let jumpPower = 1;
 let jumping = false;
 
@@ -243,23 +243,31 @@ function placeCactus(){
 }
 
 function checkCollision(){
-  let cactuspos = tilesWith(cactus1, cactus2, cactus3);
-  let playerpos = tilesWith(player);
-  for(const x of cactuspos){
-    if(x == playerpos){
-      gameOver = true;
-    }
+  let tile = getTile(2,5);
+  if(tile.length > 1){
+    gameOver = true;
   }
 }
 let currFrame = 0;
 function frame(){
-  animatedSprite.bitmapKey = animatedFrames[currFrame % 2]
+  //animatedSprite.bitmapKey = animatedFrames[currFrame % 2]
+  //getFirst(player) = animationFrames[currFrame % 2];
+  console.log(getFirst(player))
   currFrame += 1;
-  let cacti = getAll(cactus1, cactus2, cactus3);
-  for(const c of cacti){
+  let cactus1s = getAll(cactus1);
+  let cactus2s = getAll(cactus2);
+  let cactus3s = getAll(cactus3);
+  
+  for(let c of cactus1s){
     c.x -= 1;
   }
-  let randomNum = Math.floor(Math.random() * 3);
+  for(let c of cactus2s){
+    c.x -= 1;
+  }
+  for(let c of cactus3s){
+    c.x -= 1;
+  }
+  let randomNum = Math.floor(Math.random() * 8);
   if (randomNum == 0){
     placeCactus()
   }
@@ -272,12 +280,11 @@ let gameOver = false;
 setInterval(()=>{
   if(!gameOver){
     frame();
-    console.log(getFirst(cactus1))
   }
   else{
     addText("Game Over", {
-      x: 10,
-      y: 4,
+      x: 0,
+      y: 0,
       color: color`3`
     })
   }
